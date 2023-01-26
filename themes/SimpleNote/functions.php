@@ -19,6 +19,7 @@
 
   // 外観/メニュー追加
   function custom_theme_setup() {
+    add_theme_support( 'custom-header' );
     // add_theme_support( 'post-thumbnails' );
     add_theme_support( 'automatic-feed-links' ); // 投稿、コメントのRSSフィードのリンク有効化
     add_theme_support( 'title-tag' ); // titleタグ自動生成
@@ -100,43 +101,6 @@
 
 
 
-  // パンくずリスト生成
-  function mytheme_breadcrumb() {
-    if ( !is_front_page() && !is_home() ) :
-      $sep = '';
-      $post_card .= "<li class=\"breadcrumb-item\"><a href=\"". get_bloginfo('url'). "\" >HOME</a></li>";
-      $post_card .= $sep;
-      if( is_singular() ) {
-        if ( is_single() ) {
-          $cats = get_the_category();
-          if( isset($cats[0]->term_id) ) $cat_id = $cats[0]->term_id;
-          $cat_list = array();
-          while ($cat_id != 0){
-          $cat = get_category( $cat_id );
-          $cat_link = get_category_link( $cat_id );
-          array_unshift( $cat_list, "<a href=\"". $cat_link. "\">". $cat->name. '</a>' );
-          $cat_id = $cat->parent;
-          }
-          foreach($cat_list as $value){
-          $post_card .= '<li class="breadcrumb-item">'. $value. '</li>';
-          $post_card .= $sep;
-          }
-        }
-        the_title('<li class="breadcrumb-item">', '</li>');
-      }
-    endif;
-    if ( is_404() ) {
-      $post_card .= '<li class="breadcrumb-item">ページが見つかりません</li>';
-      $post_card .= $sep;
-    };
-    if ( is_search() ) {
-      $post_card .= '<li class="breadcrumb-item">検索 : '. get_search_query(). '</li>';
-      $post_card .= $sep;
-    }
-  }
-
-
-
   // ユーザープロフィール項目追加
   function my_user_meta($wb) {
     //項目の追加例
@@ -162,6 +126,13 @@
   add_action('upload_mimes', 'add_file_types_to_uploads');
 
 
+
+  //カテゴリー説明文でHTMLタグを使う
+  remove_filter( 'pre_term_description', 'wp_filter_kses' );
+  //カテゴリー説明文から自動で付与されるpタグを除去
+  remove_filter('term_description', 'wpautop');
+
+  
   
   // index ショートコード作成
   class Toc_Shortcode {

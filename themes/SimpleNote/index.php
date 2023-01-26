@@ -1,5 +1,7 @@
 <?php get_header(); ?>
-
+  <div class="header-img">
+  <?php the_custom_header_markup(); ?>
+  <div>
   <main>
     <nav>
       <ul class="top-catnav">
@@ -19,8 +21,8 @@
             <?php foreach($childs as $child): ?>
             <li class="child-cat">
               <a href="<?php echo get_category_link($child->term_id); ?>">
-                <span><?php if (function_exists('z_taxonomy_image')) z_taxonomy_image($child->term_id); ?></span>
-                <span class="child-cat-name"><?php echo $child->name; ?><span>
+                <?php if (function_exists('z_taxonomy_image')) z_taxonomy_image($child->term_id); ?>
+                <span><?php echo $child->name; ?><span>
               </a>
             </li>
             <?php endforeach; ?>
